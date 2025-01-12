@@ -15,3 +15,20 @@ export const listarLotes = async (req,res)=>{
         return res.status(500).json({"message":"Error en el servidor"})
     }
 }
+
+export const registrarLote = async (req,res)=>{
+    try{
+        const {nombre, descripcion, activo, TamX, TamY, posY, posX}=req.body
+        const sql = `INSERT INTO Lotes (nombre, descripcion, activo, TamX, TamY, posY, posX) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+        const [rows]= await pool.query(sql,[nombre, descripcion, activo, TamX, TamY, posY, posX]);
+
+        if(rows.affectedRows>0)
+            return res.status(200).json({"message":"Lote registrado"})
+        else{
+            res.status(400).json({"message":"Error al registrar lotes"})
+        }
+    }catch(error){
+        console.error(error)
+        return res.status(500).json({"message":"Error en el servidor"})
+    }
+}
